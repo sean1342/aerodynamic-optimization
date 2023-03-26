@@ -7,11 +7,10 @@ from stl import mesh
 
 # define the list of control points
 P = [[(0.0, 0.0, 0.0), (1.0, 0.0, 1.0), (2.0, 0.0, 0.0)],
-     [(0.0, 1.0, 1.0), (1.0, 1.0, -2.0), (2.0, 1.0, 1.0)],
+     [(0.0, 1.0, 1.0), (1.0, 1.0, 0.0), (2.0, 1.0, 1.0)],
      [(0.0, 2.0, 0.0), (1.0, 2.0, 1.0), (2.0, 2.0, 0.0)]
 ]
 
-# convert list of points to NumPy array
 P = np.array(P).transpose((2, 1, 0))
 
 # create and plot the Bezier surface
