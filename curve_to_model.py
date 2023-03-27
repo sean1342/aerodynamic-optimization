@@ -6,8 +6,8 @@ from scipy.spatial import Delaunay
 from stl import mesh
 
 # define the list of control points
-P = [[(0.0, 0.0, 0.0), (1.0, 0.0, 1.0), (2.0, 0.0, 0.0)],
-     [(0.0, 1.0, 1.0), (1.0, 1.0, 0.0), (2.0, 1.0, 1.0)],
+P = [[(1.5, 1.5, 0.0), (1.0, 0.0, 2.0), (2.0, 0.0, 0.0)],
+     [(0.0, 1.0, 2.0), (1.0, 1.0, 0.0), (2.0, 1.0, 2.0)],
      [(0.0, 2.0, 0.0), (1.0, 2.0, 1.0), (2.0, 2.0, 0.0)]
 ]
 
@@ -44,4 +44,4 @@ for i, f in enumerate(faces):
         surface_mesh.vectors[i][j] = vertices[f[j], :]
 
 # save the mesh to an STL file
-# surface_mesh.save('/home/sean/dev/aerodynamic-optimizer/surface.stl')
+surface_mesh.save('/home/sean/dev/aerodynamic-optimizer/surface.stl')
