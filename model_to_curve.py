@@ -1,21 +1,21 @@
 import nurbspy as nrb
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import minimize
 
 # define the list of points to fit to
-points = np.array([[(1.5, 1.5, 0.0), (1.0, 0.0, 2.0), (2.0, 0.0, 0.0)],
-                   [(0.0, 1.0, 2.0), (1.0, 1.0, 0.0), (2.0, 1.0, 2.0)],
-                   [(0.0, 2.0, 0.0), (1.0, 2.0, 1.0), (2.0, 2.0, 0.0)]
+points = np.array([[(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (2.0, 0.0, 0.0)],
+                   [(0.0, 1.0, 0.0), (1.0, 1.0, 0.0), (2.0, 1.0, 0.0)],
+                   [(0.0, 2.0, 0.0), (1.0, 2.0, 0.0), (2.0, 2.0, 0.0)]
 ])
 
 # P is the control points that we modify
-# initialize P to the points to fit to to start off
+# intitialize P as flat surface to start.
 P = np.array([[(0.0, 0.0, 0.0), (1.0, 0.0, 2.0), (2.0, 0.0, 0.0)],
               [(0.0, 1.0, 2.0), (1.0, 1.0, -2.0), (2.0, 1.0, 2.0)],
               [(0.0, 2.0, 0.0), (1.0, 2.0, 2.0), (2.0, 2.0, 0.0)]
 ])
 # transpose to get in proper format
+points = np.array(points).transpose((2, 1, 0))
 P = np.array(P).transpose((2, 1, 0))
 
 # create the NURBS surface
@@ -39,6 +39,7 @@ def loss_function(control_points):
             u,v = i/50, j/50
             coords.append(surface.get_value(u, v).flatten())
 
+    # se = squared error
     se = []
     for _ in points:
         for point in _:
@@ -54,14 +55,40 @@ def loss_function(control_points):
             # print(best_coord)
             se.append(best_dist ** 2)
     mse = np.mean(se)
-    print(mse)
-
+    # mse = mean of squared error
     return mse
 
-initial_guess = P.flatten()
+control_points = P
 
-# gradient descent here
+# # set learning rate and number of iterations
+# learning_rate = 0.01
+# num_iterations = 40
+
+# # perform gradient descent
+# for i in range(num_iterations):
+#     # compute gradient of loss function w.r.t. control points
+#     gradient = np.zeros_like(control_points)
+#     for j in range(control_points.shape[0]):
+#         for k in range(control_points.shape[1]):
+#             for l in range(control_points.shape[2]):
+#                 delta = 1e-5
+#                 control_points_plus = np.copy(control_points)
+#                 control_points_plus[j,k,l] += delta
+#                 loss_plus = loss_function(control_points_plus)
+#                 control_points_minus = np.copy(control_points)
+#                 control_points_minus[j,k,l] -= delta
+#                 loss_minus = loss_function(control_points_minus)
+#                 gradient[j,k,l] = (loss_plus - loss_minus) / (2 * delta)
+
+#     # update control points based on gradient and learning rate
+#     control_points -= learning_rate * gradient
+
+#     # print loss every 10 iterations
+#     if i % 2 == 0:
+#         print(f"Iteration {i}: Loss {loss_function(control_points)}")
+
+final_surface = nrb.NurbsSurface(control_points)
 
 # plot the final surface with the control points
-surface.plot(control_points=True, isocurves_u=8, isocurves_v=8)
+final_surface.plot(control_points=True, isocurves_u=8, isocurves_v=8)
 plt.show()
